@@ -2,6 +2,8 @@ name: Build APK
 on:
   push:
   workflow_dispatch:
+permissions:
+  contents: write
 jobs:
   build:
     runs-on: ubuntu-24.04
@@ -22,3 +24,17 @@ jobs:
         with:
           name: BNB-Jetting-APK
           path: app/build/outputs/apk/debug/app-debug.apk
+      - name: Publish release and keep a copy on the apk branch
+        run: |
+          cp app/build/outputs/apk/debug/app-debug.apk /tmp/BNB-Jetting.apk
+          gh release create "v1.5-${{ github.run_number }}" /tmp/BNB-Jetting.apk --title "BNB Jetting APK (build ${{ github.run_number }})" --notes "Debug APK built from commit ${{ github.sha }}" || true
+          git config user.name github-actions
+          git config user.email github-actions@users.noreply.github.com
+          git checkout -q --orphan apk
+          git rm -rfq .
+          cp /tmp/BNB-Jetting.apk .
+          git add BNB-Jetting.apk
+          git commit -qm "APK build ${{ github.run_number }}"
+          git push -f origin apk
+        env:
+          GH_TOKEN: ${{ github.token }}
