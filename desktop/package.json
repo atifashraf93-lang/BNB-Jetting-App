@@ -1,0 +1,15 @@
+{
+  "name": "bnb-jetting",
+  "version": "1.5.0",
+  "description": "BNB Jetting Pressure Calculator",
+  "author": "BNB Pump",
+  "main": "main.js",
+  "build": {
+    "appId": "com.bnbpump.jetting",
+    "productName": "BNB Jetting",
+    "compression": "maximum",
+    "files": ["main.js", "index.html", "icon.png"],
+    "win": { "target": "portable", "icon": "icon.png", "artifactName": "BNB-Jetting.exe" }
+  },
+  "devDependencies": { "electron": "31.7.7", "electron-builder": "24.13.3" }
+}
